@@ -1,0 +1,16 @@
+{
+    "name": "dfsmirnov/typograph",
+    "description": "Typograph",
+    "type": "library",
+    "license": "MIT",
+    "authors": [],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Typographus\\": "src"
+        }
+    }
+}
