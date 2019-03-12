@@ -1,11 +1,11 @@
 <?php
 
-namespace Typograph;
+namespace Typographus\Profiles;
 /**
  * Русский профиль для Типографа
- * Только текст, никакого HTML
  */
-class Russian extends TypographusProfile {
+class Russian extends TypographusProfile
+{
     protected $abbr = 'ООО|ОАО|ЗАО|ЧП|ИП|НПФ|НИИ|ООО\p{Zs}ТПК';
     protected $prepos = 'а|в|во|вне|и|или|к|о|с|у|о|со|об|обо|от|ото|то|на|не|ни|но|из|изо|за|уж|на|по|под|подо|пред|предо|про|над|надо|как|без|безо|что|да|для|до|там|ещё|их|или|ко|меж|между|перед|передо|около|через|сквозь|для|при|я';
     protected $metrics = 'мм|см|м|км|г|кг|б|кб|мб|гб|dpi|px';
@@ -19,7 +19,8 @@ class Russian extends TypographusProfile {
     protected $rules_braces;
     protected $rules_main;
 
-    function __construct(){
+    function __construct()
+    {
         $this->rules_strict = array(
             // Много пробелов или табуляций -> один пробел
             '~( |\t)+~u' => ' ',
@@ -49,9 +50,9 @@ class Russian extends TypographusProfile {
             '~!\?~u' => '?!',
 
             // Знаки (c), (r), (tm)
-            '~\((c|с)\)~iu'     => '©',
-            '~\(r\)~iu'     =>  '®',
-            '~\(tm\)~iu'    =>  '™',
+            '~\((c|с)\)~iu' => '©',
+            '~\(r\)~iu' => '<sup><small>®</small></sup>',
+            '~\(tm\)~iu' => '<sup>™</sup>',
 
             // От 2 до 5 знака точки подряд - на знак многоточия (больше - мб авторской задумкой).
             "~\.{2,5}~u" => '…',
@@ -66,7 +67,7 @@ class Russian extends TypographusProfile {
             // LО'Лайт, O'Reilly
             "~([a-zA-Z])'([а-яА-Яa-zA-Z])~iu" => '$1’$2',
 
-//            "~'~u" => '&#39;', //str_replace?
+            "~'~u" => '&#39;', //str_replace?
 
             // Размеры 10x10, правильный знак + убираем лишние пробелы
             '~(\p{Nd}+)\p{Zs}{0,}?[x|X|х|Х|*]\p{Zs}{0,}(\p{Nd}+)~u' => '$1×$2',
@@ -113,87 +114,83 @@ class Russian extends TypographusProfile {
             //Неразрывные названия организаций и абревиатуры форм собственности
             // ~ почему не один &nbsp;?
             // ! названия организаций тоже могут содержать пробел !
-//            '~('.$this->abbr.')\p{Zs}+(«[^»]*»)~u' => '<span style="white-space:nowrap">$1 $2</span>',
+            '~(' . $this->abbr . ')\p{Zs}+(«[^»]*»)~u' => '<span style="white-space:nowrap">$1 $2</span>',
 
             //Нельзя отрывать сокращение от относящегося к нему слова.
             //Например: тов. Сталин, г. Воронеж
             //Ставит пробел, если его нет.
-//            '~(^|[^a-zA-Zа-яА-Я])('.$this->shortages.')\.\s?([А-Я0-9]+)~su' => '$1$2.&nbsp;$3',
+            '~(^|[^a-zA-Zа-яА-Я])(' . $this->shortages . ')\.\s?([А-Я0-9]+)~su' => '$1$2.&nbsp;$3',
 
             //Не отделять стр., с. и т.д. от номера.
-//            '~(стр|с|табл|рис|илл)\.\p{Zs}*(\p{Nd}+)~siu' => '$1.&nbsp;$2',
+            '~(стр|с|табл|рис|илл)\.\p{Zs}*(\p{Nd}+)~siu' => '$1.&nbsp;$2',
 
             //Не разделять 2007 г., ставить пробел, если его нет. Ставит точку, если её нет.
-//            '~({Nd}+)\p{Zs}*([гГ])\.\s~su' => '$1&nbsp;$2. ',
+            '~({Nd}+)\p{Zs}*([гГ])\.\s~su' => '$1&nbsp;$2. ',
 
             //Неразрывный пробел между цифрой и единицей измерения
-//            '~(\p{Nd}+)\s*('.$this->metrics.')~su' => '$1&nbsp;$2',
+            '~(\p{Nd}+)\s*(' . $this->metrics . ')~su' => '$1&nbsp;$2',
 
             //Сантиметр и другие ед. измерения в квадрате, кубе и т.д.
-//            '~(\p{Zs}'.$this->metrics.')(\p{Nd}+)~u' => '$1<sup>$2</sup>',
+            '~(\p{Zs}' . $this->metrics . ')(\p{Nd}+)~u' => '$1<sup>$2</sup>',
 
             // Знак дефиса или два знака дефиса подряд — на знак длинного тире.
             // + Нельзя разрывать строку перед тире, например: Знание&nbsp;— сила, Курить&nbsp;— здоровью вредить.
-//            '~\p{Zs}+(?:--?|—)(?=\p{Zs})~u' => '&nbsp;—',
+            '~\p{Zs}+(?:--?|—)(?=\p{Zs})~u' => '&nbsp;—',
             '~^(?:--?|—)(?=\p{Zs})~u' => '—',
 
             //Прямая речь
-//            '~(?:^|\s+)(?:--?|—)(?=\p{Zs})~u' => "\n&nbsp;—",
+            '~(?:^|\s+)(?:--?|—)(?=\p{Zs})~u' => "\n&nbsp;—",
 
             // Знак дефиса, ограниченный с обоих сторон цифрами — на знак короткого тире.
             '~(?<=\p{Nd})-(?=\p{Nd})~u' => '–',
 
             // Знак дефиса, ограниченный с обоих сторон пробелами — на знак длинного тире.
-//            '~(\s)(&ndash|–)(\s)~u' => '&nbsp;&mdash; ',
+            '~(\s)(&ndash|–)(\s)~u' => '&nbsp;&mdash; ',
 
             // Знак дефиса, идущий после тэга и справа пробел — на знак длинного тире.
-//            '~(?<=>)(&ndash|–|-)(\s)~u' => '&mdash; ',
+            '~(?<=>)(&ndash|–|-)(\s)~u' => '&mdash; ',
 
             // Нельзя оставлять в конце строки предлоги и союзы
-//            '~(?<=\p{Zs}|^|\P{L})('.$this->prepos.')(\s+)~iu' => '$1&nbsp;',
+            '~(?<=\p{Zs}|^|\P{L})(' . $this->prepos . ')(\s+)~iu' => '$1&nbsp;',
 
             // Нельзя отрывать частицы бы, ли, же от предшествующего слова, например: как бы, вряд ли, так же.
-/*            '~(?<=\P{Zs})(\p{Zs}+)(ж|бы|б|же|ли|ль|либо|или)(?=<.*?>*[\p{Zs})!?.])~iu' => '&nbsp;$2',*/
+            '~(?<=\P{Zs})(\p{Zs}+)(ж|бы|б|же|ли|ль|либо|или)(?=<.*?>*[\p{Zs})!?.])~iu' => '&nbsp;$2',
 
             // Неразрывный пробел после инициалов.
-//            '~([А-ЯA-Z]\.)\s?([А-ЯA-Z]\.)\p{Zs}?([А-Яа-яA-Za-z]+)~su' => '$1$2&nbsp;$3',
+            '~([А-ЯA-Z]\.)\s?([А-ЯA-Z]\.)\p{Zs}?([А-Яа-яA-Za-z]+)~su' => '$1$2&nbsp;$3',
 
             // Сокращения сумм не отделяются от чисел.
-//            '~(\p{Nd}+)\p{Zs}?('.$this->countables.')~su'   =>  '$1&nbsp;$2',
+            '~(\p{Nd}+)\p{Zs}?(' . $this->countables . ')~su' => '$1&nbsp;$2',
 
             //«уе» в денежных суммах
-//            '~(\p{Nd}+|'.$this->countables.')\p{Zs}?уе~su'  =>  '$1&nbsp;у.е.',
+            '~(\p{Nd}+|' . $this->countables . ')\p{Zs}?уе~su' => '$1&nbsp;у.е.',
 
             // Денежные суммы, расставляя пробелы в нужных местах.
-//            '~(\p{Nd}+|'.$this->countables.')\p{Zs}?('.$this->money.')~su'  =>  '$1&nbsp;$2',
+            '~(\p{Nd}+|' . $this->countables . ')\p{Zs}?(' . $this->money . ')~su' => '$1&nbsp;$2',
 
             // Неразрывные пробелы в кавычках
             //"/($sym[lquote]\S*)(\s+)(\S*$sym[rquote])/U" => '$1'.$sym["nbsp"].'$3',
 
             //Телефоны
-//            '~(?:тел\.?/?факс:?\s?\((\d+)\))~i' => 'тел./факс:&nbsp($1)',
+            '~(?:тел\.?/?факс:?\s?\((\d+)\))~i' => 'тел./факс:&nbsp($1)',
 
-//            '~тел[:\.] ?(\p{Nd}+)~su' => '<span style="white-space:nowrap">тел: $1</span>',
+            '~тел[:\.] ?(\p{Nd}+)~su' => '<span style="white-space:nowrap">тел: $1</span>',
 
             //Номер версии программы пишем неразрывно с буковкой v.
-//            '~([vв]\.) ?(\p{Nd})~iu' => '$1&nbsp;$2',
-//            '~(\p{L}) ([vв]\.)~iu' => '$1&nbsp;$2',
+            '~([vв]\.) ?(\p{Nd})~iu' => '$1&nbsp;$2',
+            '~(\p{L}) ([vв]\.)~iu' => '$1&nbsp;$2',
 
             //% не отделяется от числа
             '~(\p{Nd}+)\p{Zs}+%~u' => '$1%',
 
             //IP-адреса рвать нехорошо
-//            '~(1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd}+)?)\.(0|1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd})?)\.(0|1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd})?)\.(0|1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd})?)~' =>
-//                '<span style="white-space:nowrap">$0</span>',
+            '~(1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd}+)?)\.(0|1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd})?)\.(0|1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd})?)\.(0|1\p{Nd}{0,2}|2(\p{Nd}|[0-5]\p{Nd})?)~' =>
+                '<span style="white-space:nowrap">$0</span>',
         );
     }
 
-    private function applyRules($rules, $str){
-        //TODO: можно лучше?
-        return preg_replace(array_keys($rules), array_values($rules), $str);
-    }
-
-    function process($str){
+    function process($str)
+    {
 
         //$str = $this->applyRules($this->rules_quotes, $str); <------- DON'T WORK PROP!!!
         $str = $this->applyRules($this->rules_strict, $str); // Сначала применим строгие правила: пробелы, запятые
@@ -205,38 +202,44 @@ class Russian extends TypographusProfile {
         return $str;
     }
 
+    private function applyRules($rules, $str)
+    {
+        //TODO: можно лучше?
+        return preg_replace(array_keys($rules), array_values($rules), $str);
+    }
+
     function quotes($text)
     {
-        $quot11='«';
-        $quot12='»';
-        $quot21='«';
-        $quot22='»';
+        $quot11 = '«';
+        $quot12 = '»';
+        $quot21 = '«';
+        $quot22 = '»';
 
-        $quotes=array('«', '»', '„','“','”','‘','’');
-        $text=str_replace($quotes, '"', $text); // Единый тип кавычек
-        $text=str_replace('""', '"', $text);
+        $quotes = array('&quot;', '&laquo;', '&raquo;', '«', '»', '&#171;', '&#187;', '&#147;', '&#132;', '&#8222;', '&#8220;', '„', '“', '”', '‘', '’');
+        $text = str_replace($quotes, '"', $text); // Единый тип кавычек
+        $text = str_replace('""', '"', $text);
 
-        $text=preg_replace('~"(\P{L})~u', '»$1', $text); // Взято из старой реализации
-        $text=preg_replace('~(\P{L})"~u', '$1«', $text); // Взято из старой реализации
+        $text = preg_replace('~"(\P{L})~u', '»$1', $text); // Взято из старой реализации
+        $text = preg_replace('~(\P{L})"~u', '$1«', $text); // Взято из старой реализации
 
 //      $text=preg_replace('/([^=]|\A)""(\.{2,4}[а-яА-Я\w\-]+|[а-яА-Я\w\-]+)/', '$1<typo:quot1>"$2', $text); // Двойных кавычек уже нет
-        $text=preg_replace('/([^=]|\A)"(\.{2,4}[\p{L}\p{M}]+|[\p{L}\p{M}\-]+)/', '$1<typo:quot1>$2', $text);
+        $text = preg_replace('/([^=]|\A)"(\.{2,4}[\p{L}\p{M}]+|[\p{L}\p{M}\-]+)/', '$1<typo:quot1>$2', $text);
 //      $text=preg_replace('/([а-яА-Я\w\.\-]+)""([\n\.\?\!, \)][^>]{0,1})/', '$1"</typo:quot1>$2', $text); // Двойных кавычек уже нет
-        $text=preg_replace('/([\p{L}\p{M}\.\-]+)"([\n\.\?\!, \)][^>]{0,1})/', '$1</typo:quot1>$2', $text);
-        $text=preg_replace('/(<\/typo:quot1>[\.\?\!]{1,3})"([\n\.\?\!, \)][^>]{0,1})/', '$1</typo:quot1>$2', $text);
-        $text=preg_replace('/(<typo:quot1>[\p{L}\p{M}\.\- \n]*?)<typo:quot1>(.+?)<\/typo:quot1>/', '$1<typo:quot2>$2</typo:quot2>', $text);
-        $text=preg_replace('/(<\/typo:quot2>.+?)<typo:quot1>(.+?)<\/typo:quot1>/', '$1<typo:quot2>$2</typo:quot2>', $text);
-        $text=preg_replace('/(<typo:quot2>.+?<\/typo:quot2>)\.(.+?<typo:quot1>)/', '$1</typo:quot1>.$2', $text);
-        $text=preg_replace('/(<typo:quot2>.+?<\/typo:quot2>)\.(?!<\/typo:quot1>)/', '$1</typo:quot1>.$2$3$4', $text);
+        $text = preg_replace('/([\p{L}\p{M}\.\-]+)"([\n\.\?\!, \)][^>]{0,1})/', '$1</typo:quot1>$2', $text);
+        $text = preg_replace('/(<\/typo:quot1>[\.\?\!]{1,3})"([\n\.\?\!, \)][^>]{0,1})/', '$1</typo:quot1>$2', $text);
+        $text = preg_replace('/(<typo:quot1>[\p{L}\p{M}\.\- \n]*?)<typo:quot1>(.+?)<\/typo:quot1>/', '$1<typo:quot2>$2</typo:quot2>', $text);
+        $text = preg_replace('/(<\/typo:quot2>.+?)<typo:quot1>(.+?)<\/typo:quot1>/', '$1<typo:quot2>$2</typo:quot2>', $text);
+        $text = preg_replace('/(<typo:quot2>.+?<\/typo:quot2>)\.(.+?<typo:quot1>)/', '$1</typo:quot1>.$2', $text);
+        $text = preg_replace('/(<typo:quot2>.+?<\/typo:quot2>)\.(?!<\/typo:quot1>)/', '$1</typo:quot1>.$2$3$4', $text);
 //      $text=preg_replace('/""/', '</typo:quot2></typo:quot1>', $text); // Двойных кавычек уже нет
-        $text=preg_replace('/(?<=<typo:quot1>)(.+?)<typo:quot2>(.+?)(?!<\/typo:quot2>)/', '$1<typo:quot2>$2', $text);
+        $text = preg_replace('/(?<=<typo:quot1>)(.+?)<typo:quot2>(.+?)(?!<\/typo:quot2>)/', '$1<typo:quot2>$2', $text);
 //      $text=preg_replace('/"/', '<typo:quot1>', $text); // Непонятный хак
 //      $text=preg_replace('/(<[^>]+)<\/typo:quot\d>/', '$1"', $text); // Еще более непонятный хак
 
-        $text=str_replace('<typo:quot1>', $quot11, $text);
-        $text=str_replace('</typo:quot1>', $quot12, $text);
-        $text=str_replace('<typo:quot2>', $quot21, $text);
-        $text=str_replace('</typo:quot2>', $quot22, $text);
+        $text = str_replace('<typo:quot1>', $quot11, $text);
+        $text = str_replace('</typo:quot1>', $quot12, $text);
+        $text = str_replace('<typo:quot2>', $quot21, $text);
+        $text = str_replace('</typo:quot2>', $quot22, $text);
 
         return $text;
     }

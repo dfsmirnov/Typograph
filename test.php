@@ -30,7 +30,9 @@
  * @author Alexander Makarov
  */
 
-include 'typographus.php';
+include 'src\typographus.php';
+include 'src\Profiles\TypographusProfile.php';
+include 'src\Profiles\Russian.php';
 
 class TypographusTester {
     /**
@@ -41,7 +43,7 @@ class TypographusTester {
     private $pass = 0;
     private $fail = 0;    
 
-	function  __construct(Typographus $typographus) {
+	function  __construct(\Typographus\Typographus $typographus) {
 		$this->typo = $typographus;
 	}
 
@@ -98,7 +100,7 @@ class TypographusTester {
     }
 }
 
-$typo = new Typographus();
+$typo = new \Typographus\Typographus();
 $tester = new TypographusTester($typo);
 
 $tester->run('core');
