@@ -192,7 +192,7 @@ class Russian extends TypographusProfile
     function process($str)
     {
 
-        //$str = $this->applyRules($this->rules_quotes, $str); <------- DON'T WORK PROP!!!
+        $str = $this->applyRules($this->rules_quotes, $str); //<------- DON'T WORK PROP!!!
         $str = $this->applyRules($this->rules_strict, $str); // Сначала применим строгие правила: пробелы, запятые
         $str = $this->quotes($str); // правильно расставим кавычки
         $str = $this->applyRules($this->rules_main, $str);
@@ -212,8 +212,8 @@ class Russian extends TypographusProfile
     {
         $quot11 = '«';
         $quot12 = '»';
-        $quot21 = '«';
-        $quot22 = '»';
+        $quot21 = '„';
+        $quot22 = '“';
 
         $quotes = array('&quot;', '&laquo;', '&raquo;', '«', '»', '&#171;', '&#187;', '&#147;', '&#132;', '&#8222;', '&#8220;', '„', '“', '”', '‘', '’');
         $text = str_replace($quotes, '"', $text); // Единый тип кавычек

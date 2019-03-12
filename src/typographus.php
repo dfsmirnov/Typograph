@@ -75,6 +75,9 @@ class Typographus
      */
     public function process($str)
     {
+        $sStart = "1THIS2IS3THE4START5";
+        $sEnd = "5THIS4IS3THE2END1";
+        $str = $sStart . " " . $str . " " . $sEnd;
         $str = $this->profile->normalize($str);
 
         $pattern = '(';
@@ -91,6 +94,8 @@ class Typographus
 
         // выдераем дублирующиеся nowrap
         $str = preg_replace('/(\<(\/?span[^\>]*)\>)+/i', '$1', $str);
+
+        $str = trim(preg_replace("/^{$sStart}[ ]?([\s\S]*)[ ]?{$sEnd}$/u", "\\1", $str));
 
         return $str;
     }
