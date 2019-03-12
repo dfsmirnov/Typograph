@@ -4,7 +4,7 @@ namespace Typograph;
 /**
  * Русский профиль для Типографа
  */
-class RussianTypographusProfile extends TypographusProfile {
+class Russian extends TypographusProfile {
     protected $abbr = 'ООО|ОАО|ЗАО|ЧП|ИП|НПФ|НИИ|ООО\p{Zs}ТПК';
     protected $prepos = 'а|в|во|вне|и|или|к|о|с|у|о|со|об|обо|от|ото|то|на|не|ни|но|из|изо|за|уж|на|по|под|подо|пред|предо|про|над|надо|как|без|безо|что|да|для|до|там|ещё|их|или|ко|меж|между|перед|передо|около|через|сквозь|для|при|я';
     protected $metrics = 'мм|см|м|км|г|кг|б|кб|мб|гб|dpi|px';

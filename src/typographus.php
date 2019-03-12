@@ -25,7 +25,7 @@ class Typographus {
         
         require $profileFile;
         
-        $profileClass = $profile.'TypographusProfile';
+        $profileClass = $profile;
 		$this->profile = new $profileClass();
 	}
 
@@ -140,4 +140,4 @@ abstract class TypographusProfile {
     }
 }
 
-class TypographusException extends Exception {}
+class TypographusException extends \Exception {}
